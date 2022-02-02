@@ -14,8 +14,8 @@ class UpdateFlightsSchema extends Migration
     public function up()
     {
         Schema::table('flights', function (Blueprint $table) {
-            $table->string('destination_image', 50)->nullable();
-            $table->string('destination_data', 50)->nullable();
+            $table->string('destination_image', 256)->nullable();
+            $table->string('destination_data', 256)->nullable();
         });
     }
 

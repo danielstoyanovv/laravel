@@ -2,7 +2,7 @@
     <h1>{{session('success')}}</h1>
 @endif
 <h2><?= Lang::get('Create new flight'); ?></h2>
-<form method="POST" action="/flight/create">
+<form method="POST" action="/flight/create" enctype="multipart/form-data">
     @csrf
     <p>
         <label for="destination"><?= Lang::get('Destination'); ?></label>
