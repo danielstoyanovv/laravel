@@ -1,6 +1,4 @@
-@if(session('success'))
-    <h1>{{session('success')}}</h1>
-@endif
+@include("alerts")
 <h2><?= Lang::get('Create new flight'); ?></h2>
 <form method="POST" action="/flight/create" enctype="multipart/form-data">
     @csrf

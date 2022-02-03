@@ -1,3 +1,4 @@
+@include("alerts")
 @foreach ($flights as $flight)
     <p>
         {{$flight->id}} - {{$flight->destination}} - <?= Lang::get('Price'); ?>: {{$flight->price}} -  
