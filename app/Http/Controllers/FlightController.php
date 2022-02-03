@@ -21,30 +21,27 @@ class FlightController extends Controller
      */
     public function list()
     {
-        return view('flight.list', [
-            'flights' => DB::table('flights')->paginate(10)
-        ]);   
+        return view('flight.list', ['flights' => DB::table('flights')->paginate(10)]);   
     }
     
     /**
      * create
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return object
      */
     public function create(Request $request)
     {
-        if ($request->isMethod('post')) {
-            $validated = $request->validate([
-                'destination' => 'required|max:50',
-                'price' => 'required|numeric',
-                'date' => 'required|date_format:Y-m-d',
-                'destination_image' => 'mimes:jpg,bmp,png|max:10240'
-            ]);
+        if ($request->isMethod('post') && $request) {
+            $validated = $this->processValidate($request);
             try {
-                $this->processData($validated, $request);
+                $flight = $this->processData($validated, $request, new Flight, Lang::get('Flight is created!'));
+                if ($flight) {
+                    return redirect()->action([self::class, 'update'], ['id' => $flight->id]);
+                }
             } catch (\Exception $e) {
-                Log::error($exception->getMessage());
+                //die($e->getMessage());
+                Log::error($e->getMessage());
             }
         }
         return view('flight.create');
@@ -54,11 +51,44 @@ class FlightController extends Controller
      * update
      *
      * @param int $id
+     * @param Request $request
      * @return object
      */
-    public function update(int $id)
+    public function update(int $id, Request $request)
     {
-        var_dump($id);
+        $flight =  Flight::where('id', $id)->first();
+        if (!$flight) {
+           session()->flash('message', Lang::get('This flight did not exists!'));
+           return redirect()->action([self::class, 'list']);
+        }
+
+        if ($request->isMethod('post') && $request) {
+            $validated = $this->processValidate($request);
+            try {
+                $this->processData($validated, $request, $flight, Lang::get('Flight is updated!'));
+            } catch (\Exception $e) {
+                //die($e->getMessage());
+                Log::error($e->getMessage());
+            }
+        }
+        
+        return view('flight.update', ['flight' => $flight]);
+    }
+
+    /**
+     * process validate
+     *
+     * @param Request $request
+     * @return array
+     */
+    private function processValidate(Request $request): array
+    {
+        return $request->validate([
+            'destination' => 'required|max:50',
+            'price' => 'required|numeric',
+            'date' => 'required|date_format:Y-m-d H:i:s',
+            'destination_image' => 'mimes:jpg,bmp,png|max:10240'
+        ]);
     }
 
     /**
@@ -66,32 +96,51 @@ class FlightController extends Controller
      *
      * @param array $validated
      * @param Request $request
+     * @param Flight $flight
+     * @param string $message
      * @return object
      */
-    private function processData(array $validated, Request $request)
+    private function processData(array $validated, Request $request, Flight $flight, string $message)
     {
-        if ($validated) {
-            $flight = new Flight;
+        if ($validated && $request && $flight && $message) {
+            $removeOldFiles = [];
             $flight->destination = $validated['destination'];
             $flight->price = $validated['price'];
             $flight->date = $validated['date'];
-            if (!empty($request->file('destination_image'))) {
+            if (!empty($request->file('destination_image')) && !empty(Storage::putFile('public/destination', $request->file('destination_image')))) {   
                 $pathImage = Storage::putFile('public/destination', $request->file('destination_image'));
-                if (!empty($pathImage)) {
-                    $flight->destination_image = $pathImage;
+                if (!empty($flight->destination_image) && (sha1_file(public_path(Storage::url($flight->destination_image))) != sha1_file(public_path(Storage::url($pathImage))))) {
+                    $removeOldFiles[] = $flight->destination_image;
                 }
+                $flight->destination_image = Storage::putFile('public/destination', $request->file('destination_image'));
             }
 
-            if (!empty($request->file('destination_data'))) {
+            if (!empty($request->file('destination_data')) && !empty(Storage::putFile('public/destination', $request->file('destination_data')))) {
                 $pathImageData = Storage::putFile('public/destination', $request->file('destination_data'));
-                if (!empty($pathImageData)) {
-                    $flight->destination_data = $pathImageData;
+                if (!empty($flight->destination_data) && (sha1_file(public_path(Storage::url($flight->destination_data))) != sha1_file(public_path(Storage::url($pathImageData))))) {
+                    $removeOldFiles[] = $flight->destination_data;
                 }
+                $flight->destination_data = Storage::putFile('public/destination', $request->file('destination_data'));
             }
 
             $flight->save();
+
+            $this->removeFilesFromFileSystem($removeOldFiles);
             ProcessFlight::dispatch($flight);
-            return redirect()->back()->withSuccess(Lang::get('Flight is created!'));
+            session()->flash('message', $message);
+            return $flight;
+        }
+    }
+
+    /**
+     * remove Files From File System
+     * @param array $files
+     * @return void
+     */
+    private function removeFilesFromFileSystem(array $files)
+    {
+        if ($files) {
+            Storage::delete($files);
         }
     }
 }
