@@ -143,4 +143,25 @@ class FlightController extends Controller
             Storage::delete($files);
         }
     }
+
+    /**
+     * delete
+     * @param int $id
+     * @return object
+     */
+    public function delete(int $id)
+    {
+        if (!$id || !Flight::find($id)) {
+            session()->flash('message', Lang::get('This flight did not exists!'));
+            return redirect()->action([self::class, 'list']);
+        }
+        $flight = Flight::find($id);
+        $files = [$flight->destination_image, $flight->destination_data];
+        if (!empty($files)) {
+            $this->removeFilesFromFileSystem($files);
+        }
+        $flight->delete();
+        session()->flash('message', Lang::get('This flight was removed!'));
+        return redirect()->action([self::class, 'list']);
+    }
 }

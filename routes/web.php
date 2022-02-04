@@ -30,3 +30,5 @@ Route::post('/flight/create', [FlightController::class, 'create']);
 Route::get('/flight/update/id/{id}', [FlightController::class, 'update']);
 
 Route::post('/flight/update/id/{id}', [FlightController::class, 'update']);
+
+Route::get('/flight/delete/id/{id}', [FlightController::class, 'delete']);

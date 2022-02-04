@@ -1,10 +1,12 @@
 @include("alerts")
 @foreach ($flights as $flight)
-    <p>
+    <div>
         {{$flight->id}} - {{$flight->destination}} - <?= Lang::get('Price'); ?>: {{$flight->price}} -  
         <?= Lang::get('Date'); ?>: {{$flight->date}} <a href="{{ url('flight/update/id', $flight->id)}}">
         <?= Lang::get('UPDATE'); ?></a>
-    </p>
+
+        <a href="{{ url('flight/delete/id', $flight->id)}}"><?= Lang::get('DELETE'); ?></a>
+    </div>
     <?php if ($flight->destination_image) : ?>
         <img src="<?= Storage::url($flight->destination_image); ?>" width="250px" />
     <?php endif; ?>
