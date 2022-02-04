@@ -32,14 +32,10 @@ class FlightCrewController extends Controller
         if ($request->isMethod('post') && $request) {
             $validated = $this->processValidate($request);
             try {
-                $flightCrew = $this->processData($validated, $request, new FlightsCrew, Lang::get('Flight crew is created!'));
-               
-                
+                $flightCrew = $this->processData($validated, $request, new FlightsCrew, Lang::get('Flight crew is created!'));               
                if ($flightCrew) {
                     return redirect()->action([self::class, 'update'], ['id' => $flightCrew->crew_id]);
                 }
-                
-                
             } catch (\Exception $e) {
                 //die($e->getMessage());
                 Log::error($e->getMessage());
@@ -127,7 +123,6 @@ class FlightCrewController extends Controller
             return redirect()->action([self::class, 'list']);
         }
         $flightsCrew = FlightsCrew::find($id);
-     
         $flightsCrew->delete();
         session()->flash('message', Lang::get('This flight crew was removed!'));
         return redirect()->action([self::class, 'list']);
