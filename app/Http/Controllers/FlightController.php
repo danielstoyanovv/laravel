@@ -21,7 +21,12 @@ class FlightController extends Controller
      */
     public function list()
     {
-        return view('flight.list', ['flights' => DB::table('flights')->paginate(10)]);   
+        $flights = DB::table('flights')
+            ->leftJoin('flights_crew', 'flights.crewid', '=', 'flights_crew.crew_id')
+            ->select('flights.*', 'flights_crew.*')
+            ->paginate(10);
+
+        return view('flight.list', ['flights' => $flights]);   
     }
     
     /**
