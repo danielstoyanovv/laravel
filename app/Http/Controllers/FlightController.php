@@ -21,12 +21,7 @@ class FlightController extends Controller
      */
     public function list()
     {
-        $flights = DB::table('flights')
-            ->leftJoin('flights_crew', 'flights.crewid', '=', 'flights_crew.crew_id')
-            ->select('flights.*', 'flights_crew.*')
-            ->paginate(10);
-
-        return view('flight.list', ['flights' => $flights]);   
+        return view('flight.list', ['flights' => Flight::paginate(10)]);   
     }
     
     /**
@@ -119,7 +114,7 @@ class FlightController extends Controller
             $flight->destination = $validated['destination'];
             $flight->price = $validated['price'];
             $flight->date = $validated['date'];
-            $flight->crewid = $validated['flights_crew'];
+            $flight->crew_id = $validated['flights_crew'];
 
             if (!empty($request->file('destination_image')) && !empty(Storage::putFile('public/destination', $request->file('destination_image')))) {   
                 $pathImage = Storage::putFile('public/destination', $request->file('destination_image'));

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateFlightsAddForeingId extends Migration
+class UpdateFlightsAddForeingAgain2 extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class UpdateFlightsAddForeingId extends Migration
      */
     public function up()
     {
-        Schema::table('flights', function (Blueprint $table) {
-            $table->integer('crewid')->unsigned();
+        Schema::table('flights', function($table) {
+            $table->foreignId('crew_id');
         });
     }
 
@@ -25,8 +25,6 @@ class UpdateFlightsAddForeingId extends Migration
      */
     public function down()
     {
-        Schema::table('flights', function (Blueprint $table) {
-            $table->dropColumn('crewid');
-        });
+        $table->dropColumn('crew_id');
     }
 }

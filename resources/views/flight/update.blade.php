@@ -58,7 +58,7 @@
             <select name="flights_crew" class="@error('flights_crew') is-invalid @enderror">
                 <option><option>
                 <?php foreach ($flightsCrew as $crew) : ?>
-                    <option value="<?= $crew->crew_id ?>" <?php if ($flight->crewid == $crew->crew_id) : ?><?= 'SELECTED' ?><?php endif; ?> ><?= $crew->main_captain ?></option>
+                    <option value="<?= $crew->crew_id ?>" <?php if ($flight->crew_id == $crew->crew_id) : ?><?= 'SELECTED' ?><?php endif; ?> ><?= $crew->main_captain ?></option>
                 <?php endforeach; ?>
             </select>
         <?php endif; ?>
