@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\FlightController;
 use App\Http\Controllers\FlightCrewController;
+use App\Http\Controllers\PassengerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,17 @@ Route::get('/flightcrew/update/id/{id}', [FlightCrewController::class, 'update']
 Route::post('/flightcrew/update/id/{id}', [FlightCrewController::class, 'update']);
 
 Route::get('/flightcrew/delete/id/{id}', [FlightCrewController::class, 'delete']);
+
+Route::get('/passenger/create', [PassengerController::class, 'create']);
+
+Route::post('/passenger/create', [PassengerController::class, 'create']);
+
+Route::get('/passenger/update/id/{id}', [PassengerController::class, 'update']);
+
+Route::post('/passenger/update/id/{id}', [PassengerController::class, 'update']);
+
+Route::get('/passenger/list', [PassengerController::class, 'list']);
+
 
 
 

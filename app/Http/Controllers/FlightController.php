@@ -21,7 +21,9 @@ class FlightController extends Controller
      */
     public function list()
     {
-        return view('flight.list', ['flights' => Flight::paginate(10)]);   
+        return view('flight.list', [
+            'flights' => Flight::paginate(10)
+        ]);
     }
     
     /**
@@ -44,7 +46,7 @@ class FlightController extends Controller
                 Log::error($e->getMessage());
             }
         }
-        return view('flight.create', ['flightsCrew' => DB::table('flights_crew')->select('crew_id', 'main_captain')->get()]);
+        return view('flight.create');
     }
 
     /**
@@ -74,7 +76,7 @@ class FlightController extends Controller
         
         return view('flight.update', [
             'flight' => $flight,
-            'flightsCrew' => DB::table('flights_crew')->select('crew_id', 'main_captain')->get()
+            'flightsCrew' => DB::table('flights_crew')->select('id', 'main_captain')->get()
         ]);
     }
 
@@ -90,11 +92,7 @@ class FlightController extends Controller
             'destination' => 'required|max:50',
             'price' => 'required|numeric',
             'date' => 'required|date_format:Y-m-d H:i:s',
-            'destination_image' => 'mimes:jpg,bmp,png|max:10240',
-            'flights_crew' => 'required'
-        ],
-        [
-            'flights_crew.required' => 'Please select the main captain for this flight!' 
+            'destination_image' => 'mimes:jpg,bmp,png|max:10240'
         ]);
     }
 
@@ -114,7 +112,6 @@ class FlightController extends Controller
             $flight->destination = $validated['destination'];
             $flight->price = $validated['price'];
             $flight->date = $validated['date'];
-            $flight->crew_id = $validated['flights_crew'];
 
             if (!empty($request->file('destination_image')) && !empty(Storage::putFile('public/destination', $request->file('destination_image')))) {   
                 $pathImage = Storage::putFile('public/destination', $request->file('destination_image'));

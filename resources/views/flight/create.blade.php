@@ -41,22 +41,5 @@
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
     </p>
-    <p>
-        <label for="flights_crew"><?= Lang::get('Choose flight main captain'); ?></label>
-        <br />
-        <?php if ($flightsCrew) : ?>
-            <select name="flights_crew" class="@error('flights_crew') is-invalid @enderror">
-                <option><option>
-                <?php foreach ($flightsCrew as $crew) : ?>
-                    <option value="<?= $crew->crew_id ?>"><?= $crew->main_captain ?></option>
-                <?php endforeach; ?>
-            </select>
-        <?php endif; ?>
-        @error('flights_crew')
-            <div class="alert alert-danger">{{ $message }}</div>
-        @enderror
-        
-    </p>
-
-    <button><?= Lang::get('Submit'); ?></button>
+    <button><?= Lang::get('Create'); ?></button>
 </form>

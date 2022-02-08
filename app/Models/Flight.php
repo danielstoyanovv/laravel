@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\FlightsCrew;
+use App\Models\Passenger;
 
 class Flight extends Model
 {
@@ -44,13 +45,23 @@ class Flight extends Model
      * @var array
      */
     protected $guarded = [];
-
+    
     /**
      * create crew relatation
      * return object
      */
     public function flightsCrew()
     {
-        return $this->belongsTo(FlightsCrew::class, 'crew_id');
+        return $this->hasOne(FlightsCrew::class);
+        //return $this->hasManyThrough(Passenger::class,FlightsCrew::class);
+    }
+
+    /**
+     * create crew relatation
+     * return object
+     */
+    public function passenger()
+    {
+        return $this->hasMany(Passenger::class);
     }
 }

@@ -129,6 +129,8 @@
                     <a href="/flight/create"><?= Lang::get('Create new flight'); ?></a>
                     <a href="/flightcrew/list"><?= Lang::get('Flights Crew'); ?></a>
                     <a href="/flightcrew/create"><?= Lang::get('Create new flight crew'); ?></a>
+                    <a href="/passenger/create"><?= Lang::get('Create new passenger'); ?></a>
+                    <a href="/passenger/list"><?= Lang::get('Passenger'); ?></a>                    
                 </div>
             </div>
         </div>

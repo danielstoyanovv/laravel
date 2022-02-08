@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Flight;
 
-class FlightsCrew extends Model
+class Passenger extends Model
 {
     use HasFactory;
 
@@ -14,7 +15,7 @@ class FlightsCrew extends Model
      *
      * @var string
      */
-    protected $table = 'flights_crew';
+    protected $table = 'passengers';
 
     /**
      * The primary key associated with the table.
@@ -43,4 +44,13 @@ class FlightsCrew extends Model
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * create crew relatation
+     * return object
+     */
+    public function flight()
+    {
+        return $this->belongsTo(Flight::class);
+    }
 }

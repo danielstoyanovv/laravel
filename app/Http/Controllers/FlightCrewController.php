@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
+use App\Models\Flight;
 
 class FlightCrewController extends Controller
 {
@@ -18,7 +19,10 @@ class FlightCrewController extends Controller
      */
     public function list()
     {
-        return view('flight.crew.list', ['flightsCrew' => DB::table('flights_crew')->paginate(10)]);
+        return view('flight.crew.list', [
+            'flightsCrew' => FlightsCrew::paginate(10),
+            'flights' => Flight::select('id', 'destination')->get()
+        ]);
     }
 
     /**
@@ -34,14 +38,16 @@ class FlightCrewController extends Controller
             try {
                 $flightCrew = $this->processData($validated, $request, new FlightsCrew, Lang::get('Flight crew is created!'));               
                if ($flightCrew) {
-                    return redirect()->action([self::class, 'update'], ['id' => $flightCrew->crew_id]);
+                    return redirect()->action([self::class, 'update'], ['id' => $flightCrew->id]);
                 }
             } catch (\Exception $e) {
                 //die($e->getMessage());
                 Log::error($e->getMessage());
             }
         }
-        return view('flight.crew.create');
+        return view('flight.crew.create', [
+            'flights' => DB::table('flights')->select('id', 'destination')->get()
+        ]);
     }
 
     /**
@@ -58,6 +64,10 @@ class FlightCrewController extends Controller
             'crew_member_1' => 'required|max:50',
             'crew_member_2' => 'required|max:50',
             'crew_member_3' => 'required|max:50',
+            'flight_id' => 'required',
+        ],
+        [
+            'flight_id.required' => 'Please select flight destination!' 
         ]);
     }
 
@@ -108,7 +118,10 @@ class FlightCrewController extends Controller
             }
         }
         
-        return view('flight.crew.update', ['flightCrew' => $flightCrew]);
+        return view('flight.crew.update', [
+            'flightCrew' => $flightCrew,
+            'flights' => DB::table('flights')->select('id', 'destination')->get()
+        ]);
     }
 
      /**

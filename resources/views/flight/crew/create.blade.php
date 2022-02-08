@@ -45,6 +45,21 @@
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
     </div>
-    <br />
+    @if (!empty($flights))
+        <div>
+            <label for="flight_id"><?= Lang::get('Select flight destination'); ?></label>
+            <select name='flight_id' class="@error('flight_id') is-invalid @enderror">
+                <option value=""></option>
+                @foreach ($flights as $flight)
+                    @if ($flight->destination)
+                        <option value="{{$flight->id}}">{{$flight->destination}}
+                    @endif
+                @endforeach
+            </select>
+            @error('flight_id')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+    @endif
     <button><?= Lang::get('Create'); ?></button>
 </form>

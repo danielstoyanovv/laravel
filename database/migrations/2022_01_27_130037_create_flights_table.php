@@ -18,6 +18,8 @@ class CreateFlightsTable extends Migration
             $table->string('destination')->nullable();
             $table->float('price', 8, 2);
             $table->dateTime('date', $precision = 0);
+            $table->string('destination_image', 256)->nullable();
+            $table->string('destination_data', 256)->nullable();
             $table->timestamps();
         });
     }

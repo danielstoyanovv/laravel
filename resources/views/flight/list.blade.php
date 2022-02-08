@@ -14,25 +14,20 @@
         <a href="<?= Storage::url($flight->destination_data); ?>"><?= Lang::get('Destination data'); ?></a>
     @endif
     @if ($flight->flightsCrew)
-        @foreach ($flight->flightsCrew()->get() as $crew)
-            @if ($crew->main_captain)
-                <h3><?= Lang::get('Flight Crew'); ?></h3>
-                <p><b><?= Lang::get('Main captain'); ?>:</b> {{$crew->main_captain}}<p>
-            @endif
-            
-            @if ($crew->captain)
-                <p><b><?= Lang::get('Captain'); ?>:</b> {{$crew->captain}}<p>
-            @endif
-            @if ($crew->crew_member_1)
-                <p><b><?= Lang::get('Crew member 1'); ?>:</b> {{$crew->crew_member_1}}<p>
-            @endif
-            @if ($crew->crew_member_2)
-                <p><b><?= Lang::get('Crew member 2'); ?>:</b> {{$crew->crew_member_2}}<p>
-            @endif
-            @if ($crew->crew_member_3)
-                <p><b><?= Lang::get('Crew member 3'); ?>:</b> {{$crew->crew_member_3}}<p>
-            @endif
-        @endforeach
+        <div>
+            <p><b><?= Lang::get('Flight main captain'); ?>:</b> {{$flight->flightsCrew->main_captain}}</p>
+            <p><b><?= Lang::get('Flight captain'); ?>:</b> {{$flight->flightsCrew->captain}}</p>
+            <p><b><?= Lang::get('Flight member 1'); ?>:</b> {{$flight->flightsCrew->crew_member_1}}</p>
+            <p><b><?= Lang::get('Flight member 2'); ?>:</b> {{$flight->flightsCrew->crew_member_2}}</p>
+            <p><b><?= Lang::get('Flight member 3'); ?>:</b> {{$flight->flightsCrew->crew_member_3}}</p>
+        </div>
+    @endif
+    @if ($flight->passenger)
+        <div>
+            @foreach ($flight->passenger()->get() as $passenger)
+            <p><b><?= Lang::get("Flight passenger"); ?>:</b> {{$passenger->name}}</p>
+            @endforeach
+        </div>
     @endif
 @endforeach
 <div class="d-felx justify-content-center">
