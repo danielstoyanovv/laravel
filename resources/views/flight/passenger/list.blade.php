@@ -1,4 +1,5 @@
-@include("alerts")
+@extends('layouts.app')
+@section('content')
 @if (!empty($passengers))
     @foreach ($passengers as $passenger)
         <p><b><?= Lang::get('Passenger name'); ?></b></p>
@@ -14,3 +15,4 @@
 <div class="d-felx justify-content-center">
      {{ $passengers->links() }}
 </div>
+@stop
