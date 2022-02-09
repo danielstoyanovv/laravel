@@ -28,4 +28,4 @@
 <div class="d-felx justify-content-center">
      {{ $flightsCrew->links() }}
 </div>
-@stop
+@endsection

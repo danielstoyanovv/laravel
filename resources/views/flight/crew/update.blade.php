@@ -64,4 +64,4 @@
     @endif
     <button><?= Lang::get('Update'); ?></button>
 </form>
-@stop
+@endsection
