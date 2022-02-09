@@ -12,6 +12,7 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FlightController as FrontEndFlightController;
 
 class FlightController extends Controller
 {
@@ -158,7 +159,7 @@ class FlightController extends Controller
     {
         if (!$id || !Flight::find($id)) {
             session()->flash('message', Lang::get('This flight did not exists!'));
-            return redirect()->action([self::class, 'list']);
+            return redirect()->action([self::class, 'create']);
         }
         $flight = Flight::find($id);
         $files = [$flight->destination_image, $flight->destination_data];
@@ -167,6 +168,6 @@ class FlightController extends Controller
         }
         $flight->delete();
         session()->flash('message', Lang::get('This flight was removed!'));
-        return redirect()->action([self::class, 'list']);
+        return redirect()->action([FrontEndFlightController::class, 'list']);
     }
 }
