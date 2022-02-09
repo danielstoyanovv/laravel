@@ -57,10 +57,6 @@ Route::post('/passenger/update/id/{id}', [PassengerController::class, 'update'])
 
 Route::get('/passenger/list', [PassengerController::class, 'list']);
 
-
-
-
-
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

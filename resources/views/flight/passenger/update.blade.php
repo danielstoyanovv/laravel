@@ -31,4 +31,4 @@
         <button><?= Lang::get('Update'); ?></button>
     </form>
 @endif
-@stop
+@endsection

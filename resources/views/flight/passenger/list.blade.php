@@ -15,4 +15,4 @@
 <div class="d-felx justify-content-center">
      {{ $passengers->links() }}
 </div>
-@stop
+@endsection
