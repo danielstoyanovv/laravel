@@ -44,4 +44,4 @@
     </p>
     <button><?= Lang::get('Create'); ?></button>
 </form>
-@stop
+@endsection

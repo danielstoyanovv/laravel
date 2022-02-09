@@ -34,4 +34,4 @@
 <div class="d-felx justify-content-center">
      {{ $flights->links() }}
 </div>
-@stop
+@endsection
