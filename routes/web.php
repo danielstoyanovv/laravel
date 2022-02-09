@@ -5,6 +5,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\FlightController;
 use App\Http\Controllers\FlightCrewController;
 use App\Http\Controllers\PassengerController;
+use App\Http\Controllers\Auth\FlightController as AuthFlightController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,16 +25,6 @@ Route::get('/', function () {
 Route::get('/test/', [TestController::class, 'show']);
 
 Route::get('/flight/list', [FlightController::class, 'list']);
-
-Route::get('/flight/create', [FlightController::class, 'create']);
-
-Route::post('/flight/create', [FlightController::class, 'create']);
-
-Route::get('/flight/update/id/{id}', [FlightController::class, 'update']);
-
-Route::post('/flight/update/id/{id}', [FlightController::class, 'update']);
-
-Route::get('/flight/delete/id/{id}', [FlightController::class, 'delete']);
 
 Route::get('/flightcrew/list', [FlightCrewController::class, 'list']);
 
@@ -59,4 +50,15 @@ Route::get('/passenger/list', [PassengerController::class, 'list']);
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin');
+
+Route::get('/auth/flight/create', [AuthFlightController::class, 'create']);
+
+Route::post('/auth/flight/create', [AuthFlightController::class, 'create']);
+
+Route::get('/auth/flight/update/id/{id}', [AuthFlightController::class, 'update']);
+
+Route::post('/auth/flight/update/id/{id}', [AuthFlightController::class, 'update']);
+
+Route::get('/auth/flight/delete/id/{id}', [AuthFlightController::class, 'delete']);
+
