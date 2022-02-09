@@ -1,4 +1,5 @@
-@include("alerts")
+@extends('layouts.app')
+@section('content')
 <h2><?= Lang::get('Create new flight crew'); ?></h2>
 <form method="POST" action="/flightcrew/update/id/@if (!empty($flightCrew)){{$flightCrew->id}}@endif" enctype="multipart/form-data">
     @csrf
@@ -63,3 +64,4 @@
     @endif
     <button><?= Lang::get('Update'); ?></button>
 </form>
+@stop

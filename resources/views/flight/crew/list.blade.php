@@ -1,4 +1,5 @@
-@include("alerts")
+@extends('layouts.app')
+@section('content')
 @foreach ($flightsCrew as $flightCrew)
     <div>
         <p><?= Lang::get('Crew id'); ?> - {{$flightCrew->id}}</p>
@@ -27,3 +28,4 @@
 <div class="d-felx justify-content-center">
      {{ $flightsCrew->links() }}
 </div>
+@stop
