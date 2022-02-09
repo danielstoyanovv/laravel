@@ -47,8 +47,7 @@ class PassengerController extends Controller
     {
         return $request->validate([
             'name' => 'required|max:50',
-            'flight_id' => 'required'
-            
+            'flight_id' => 'required'  
         ],
          [
             'flight_id.required' => 'Please select the flight!' 

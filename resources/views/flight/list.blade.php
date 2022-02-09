@@ -1,4 +1,5 @@
-@include("alerts")
+@extends('layouts.app')
+@section('content')
 @foreach ($flights as $flight)
     <div>
         {{$flight->id}} - {{$flight->destination}} - <?= Lang::get('Price'); ?>: {{$flight->price}} -  
@@ -33,3 +34,4 @@
 <div class="d-felx justify-content-center">
      {{ $flights->links() }}
 </div>
+@stop
