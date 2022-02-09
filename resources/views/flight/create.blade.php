@@ -1,4 +1,5 @@
-@include("alerts")
+@extends('layouts.app')
+@section('content')
 <h2><?= Lang::get('Create new flight'); ?></h2>
 <form method="POST" action="/flight/create" enctype="multipart/form-data">
     @csrf
@@ -43,3 +44,4 @@
     </p>
     <button><?= Lang::get('Create'); ?></button>
 </form>
+@stop
