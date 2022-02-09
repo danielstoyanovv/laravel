@@ -3,10 +3,12 @@
 @foreach ($flights as $flight)
     <div>
         {{$flight->id}} - {{$flight->destination}} - <?= Lang::get('Price'); ?>: {{$flight->price}} -  
-        <?= Lang::get('Date'); ?>: {{$flight->date}} <a href="{{ url('flight/update/id', $flight->id)}}">
-        <?= Lang::get('UPDATE'); ?></a>
-
-        <a href="{{ url('flight/delete/id', $flight->id)}}"><?= Lang::get('DELETE'); ?></a>
+        <?= Lang::get('Date'); ?>: {{$flight->date}} 
+        @auth
+            <a href="{{ url('auth/flight/update/id', $flight->id)}}">
+            <?= Lang::get('UPDATE'); ?></a>
+            <a href="{{ url('auth/flight/delete/id', $flight->id)}}"><?= Lang::get('DELETE'); ?></a>
+        @endauth
     </div>
     @if ($flight->destination_image)
         <img src="<?= Storage::url($flight->destination_image); ?>" width="250px" />
