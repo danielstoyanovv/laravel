@@ -16,12 +16,12 @@
                     {{ __('You are logged in!') }}
                 </div>
                 <div>
-                    <p><a href="/flight/list"><?= Lang::get('Flights'); ?></a></p>
-                    <p><a href="/flight/create"><?= Lang::get('Create new flight'); ?></a></p>
-                    <p><a href="/flightcrew/list"><?= Lang::get('Flights Crew'); ?></a></p>
-                    <p><a href="/flightcrew/create"><?= Lang::get('Create new flight crew'); ?></a></p>
-                    <p><a href="/passenger/create"><?= Lang::get('Create new passenger'); ?></a></p>
-                    <p><a href="/passenger/list"><?= Lang::get('Passenger'); ?></a></p>                    
+                    <p><a href="/flight/list">{{ __('Flights') }}</a></p>
+                    <p><a href="/auth/flight/create">{{ __('Create new flight') }}</a></p>
+                    <p><a href="/flightcrew/list">{{ __('Flights Crew') }}</a></p>
+                    <p><a href="/auth/flightcrew/create">{{ __('Create new flight crew') }}</a></p>
+                    <p><a href="/auth/passenger/create">{{ __('Create new passenger') }}</a></p>
+                    <p><a href="/passenger/list">{{ __('Passenger') }}</a></p>                    
                 </div>
             </div>
         </div>

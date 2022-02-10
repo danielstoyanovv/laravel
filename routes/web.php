@@ -26,11 +26,11 @@ Route::get('/', function () {
 
 Route::get('/test/', [TestController::class, 'show']);
 
-Route::get('/flight/list', [FlightController::class, 'list']);
+Route::get('/flight/list', [FlightController::class, 'list'])->name('flights');
 
-Route::get('/flightcrew/list', [FlightCrewController::class, 'list']);
+Route::get('/flightcrew/list', [FlightCrewController::class, 'list'])->name('crews');
 
-Route::get('/passenger/list', [PassengerController::class, 'list']);
+Route::get('/passenger/list', [PassengerController::class, 'list'])->name('passengers');
 
 Auth::routes();
 
