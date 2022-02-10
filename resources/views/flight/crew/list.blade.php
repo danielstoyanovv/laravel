@@ -19,10 +19,12 @@
                 @endif
             @endforeach
         @endif
-        <p><a href="{{ url('flightcrew/update/id', $flightCrew->id)}}"></p>
-        <?= Lang::get('UPDATE'); ?></a>
+        @auth
+            <p><a href="{{ url('auth/flightcrew/update/id', $flightCrew->id)}}"></p>
+            <?= Lang::get('UPDATE'); ?></a>
 
-        <a href="{{ url('flightcrew/delete/id', $flightCrew->id)}}"><?= Lang::get('DELETE'); ?></a>
+            <a href="{{ url('auth/flightcrew/delete/id', $flightCrew->id)}}"><?= Lang::get('DELETE'); ?></a>
+        @endauth
     </div>
 @endforeach
 <div class="d-felx justify-content-center">

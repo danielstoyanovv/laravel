@@ -6,6 +6,7 @@ use App\Http\Controllers\FlightController;
 use App\Http\Controllers\FlightCrewController;
 use App\Http\Controllers\PassengerController;
 use App\Http\Controllers\Auth\FlightController as AuthFlightController;
+use App\Http\Controllers\Auth\FlightCrewController as AuthFlightCrewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,16 +28,6 @@ Route::get('/test/', [TestController::class, 'show']);
 Route::get('/flight/list', [FlightController::class, 'list']);
 
 Route::get('/flightcrew/list', [FlightCrewController::class, 'list']);
-
-Route::get('/flightcrew/create', [FlightCrewController::class, 'create']);
-
-Route::post('/flightcrew/create', [FlightCrewController::class, 'create']);
-
-Route::get('/flightcrew/update/id/{id}', [FlightCrewController::class, 'update']);
-
-Route::post('/flightcrew/update/id/{id}', [FlightCrewController::class, 'update']);
-
-Route::get('/flightcrew/delete/id/{id}', [FlightCrewController::class, 'delete']);
 
 Route::get('/passenger/create', [PassengerController::class, 'create']);
 
@@ -62,3 +53,12 @@ Route::post('/auth/flight/update/id/{id}', [AuthFlightController::class, 'update
 
 Route::get('/auth/flight/delete/id/{id}', [AuthFlightController::class, 'delete']);
 
+Route::get('/auth/flightcrew/create', [AuthFlightCrewController::class, 'create']);
+
+Route::post('/auth/flightcrew/create', [AuthFlightCrewController::class, 'create']);
+
+Route::get('/auth/flightcrew/update/id/{id}', [AuthFlightCrewController::class, 'update']);
+
+Route::post('/auth/flightcrew/update/id/{id}', [AuthFlightCrewController::class, 'update']);
+
+Route::get('/auth/flightcrew/delete/id/{id}', [AuthFlightCrewController::class, 'delete']);
