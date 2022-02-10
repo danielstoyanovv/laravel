@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('content')
-<h2><?= Lang::get('Create new passenger'); ?></h2>
-<form method="POST" action="/passenger/create" enctype="multipart/form-data">
+<h2>{{ __('Create new passenger') }}</h2>
+<form method="POST" action="/auth/passenger/create" enctype="multipart/form-data">
     @csrf
     <div>
-        <label for="name"><?= Lang::get('Full Name'); ?></label>
+        <label for="name">{{ __('Full Name') }}</label>
         <input id="name" name="name" type="text" class="@error('name') is-invalid @enderror">
         @error('name')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -12,7 +12,7 @@
     </div>
     @if (!empty($flights))
         <div>
-            <label for="flight_id"><?= Lang::get('Select flight'); ?></label>
+            <label for="flight_id">{{ __('Select flight') }}</label>
             <select name='flight_id' class="@error('flight_id') is-invalid @enderror">
                 <option value=""></option>
                 @foreach ($flights as $flight)
@@ -26,6 +26,6 @@
             @enderror
         </div>
     @endif    
-    <button><?= Lang::get('Create'); ?></button>
+    <button>{{ __('Create') }}</button>
 </form>
 @endsection
