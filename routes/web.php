@@ -8,6 +8,7 @@ use App\Http\Controllers\PassengerController;
 use App\Http\Controllers\Auth\FlightController as AuthFlightController;
 use App\Http\Controllers\Auth\FlightCrewController as AuthFlightCrewController;
 use App\Http\Controllers\Auth\PassengerController as AuthPassengerController;
+use App\Http\Controllers\FaceBook\CallbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,7 +35,7 @@ Route::get('/passenger/list', [PassengerController::class, 'list'])->name('passe
 
 Auth::routes();
 
-Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin');
+Route::get('admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin');
 
 Route::get('/auth/flight/create', [AuthFlightController::class, 'create']);
 
@@ -63,3 +64,7 @@ Route::post('/auth/passenger/create', [AuthPassengerController::class, 'create']
 Route::get('/auth/passenger/update/id/{id}', [AuthPassengerController::class, 'update']);
 
 Route::post('/auth/passenger/update/id/{id}', [AuthPassengerController::class, 'update']);
+
+Route::get('facebook/redirect', [CallbackController::class, 'redirect']);
+
+Route::get('/facebook/callback', [CallbackController::class, 'login']);
