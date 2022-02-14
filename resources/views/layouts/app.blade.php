@@ -45,6 +45,12 @@
                             <a class="nav-link" href="{{ url('flights') }}">{{ __('Flights') }}</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ url('users') }}">{{ __('Users') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('roles') }}">{{ __('Roles') }}</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('crews') }}">{{ __('Crews') }}</a>
                         </li>
                         <li class="nav-item">
