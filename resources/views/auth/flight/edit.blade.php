@@ -1,7 +1,10 @@
 @extends('layouts.app')
 @section('content')
-<h2><?= Lang::get('Create new flight'); ?></h2>
-<form method="POST" action="/auth/flight/update/id/<?php if (!empty($flight)) : ?><?= $flight->id ?><?php endif; ?>" enctype="multipart/form-data">
+<h2><?= Lang::get('Flight data'); ?></h2>
+<div class="pull-right">
+    <a class="btn btn-primary" href="{{ route('flights.index') }}">{{ __('Back') }}</a>
+</div>
+{!! Form::model($flight, ['method' => 'PATCH', 'files' => true, 'route' => ['flights.update', $flight->id]]) !!}
     @csrf
     <p>
         <label for="destination"><?= Lang::get('Destination'); ?></label>
@@ -53,5 +56,5 @@
     <?php endif; ?>
     </p>
     <button><?= Lang::get('Update'); ?></button>
-</form>
+{!! Form::close() !!}
 @endsection

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <h2><?= Lang::get('Create new flight'); ?></h2>
-<form method="POST" action="/auth/flight/create" enctype="multipart/form-data">
+{!! Form::open(array('route' => 'flights.store','method'=>'POST', 'files' => true)) !!}
     @csrf
     <p>
         <label for="destination"><?= Lang::get('Destination'); ?></label>
@@ -43,5 +43,5 @@
         @enderror
     </p>
     <button><?= Lang::get('Create'); ?></button>
-</form>
+{!! Form::close() !!}
 @endsection

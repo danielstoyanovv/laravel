@@ -12,20 +12,9 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\FlightController as FrontEndFlightController;
 
 class FlightController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * create
      *
@@ -34,12 +23,24 @@ class FlightController extends Controller
      */
     public function create(Request $request)
     {
+        return view('auth.flight.create');
+    }
+
+
+    /**
+     * store
+     *
+     * @param Request $request
+     * @return object
+     */
+    public function store(Request $request)
+    {
         if ($request->isMethod('post') && $request) {
             $validated = $this->processValidate($request);
             try {
                 $flight = $this->processData($validated, $request, new Flight, Lang::get('Flight is created!'));
                 if ($flight) {
-                    return redirect()->action([self::class, 'update'], ['id' => $flight->id]);
+                    return redirect()->route('flights.show', $flight->id);
                 }
             } catch (\Exception $e) {
                 //die($e->getMessage());
@@ -47,6 +48,45 @@ class FlightController extends Controller
             }
         }
         return view('auth.flight.create');
+    }
+    /**
+     * show
+     *
+     * @param int $id
+     * @param Request $request
+     * @return object
+     */
+    public function show(int $id, Request $request)
+    {
+        $flight =  Flight::where('id', $id)->first();
+        if (!$flight) {
+           session()->flash('message', Lang::get('This flight did not exists!'));
+           return redirect()->route('flights.create');
+        }
+        
+        return view('auth.flight.show', [
+            'flight' => $flight
+        ]);
+    }
+
+    /**
+     * update
+     *
+     * @param int $id
+     * @param Request $request
+     * @return object
+     */
+    public function edit(int $id, Request $request)
+    {
+        $flight =  Flight::where('id', $id)->first();
+        if (!$flight) {
+           session()->flash('message', Lang::get('This flight did not exists!'));
+           return redirect()->action([self::class, 'create']);
+        }
+        
+        return view('auth.flight.edit', [
+            'flight' => $flight
+        ]);
     }
 
     /**
@@ -63,20 +103,20 @@ class FlightController extends Controller
            session()->flash('message', Lang::get('This flight did not exists!'));
            return redirect()->action([self::class, 'create']);
         }
-
-        if ($request->isMethod('post') && $request) {
+        
+        if ($request->isMethod('patch') && $request) {
             $validated = $this->processValidate($request);
             try {
                 $this->processData($validated, $request, $flight, Lang::get('Flight is updated!'));
+                return redirect()->route('flights.show', $flight->id);
             } catch (\Exception $e) {
                 //die($e->getMessage());
                 Log::error($e->getMessage());
             }
         }
         
-        return view('auth.flight.update', [
-            'flight' => $flight,
-            'flightsCrew' => DB::table('flights_crew')->select('id', 'main_captain')->get()
+        return view('auth.flight.edit', [
+            'flight' => $flight
         ]);
     }
 
@@ -155,7 +195,7 @@ class FlightController extends Controller
      * @param int $id
      * @return object
      */
-    public function delete(int $id)
+    public function destroy (int $id)
     {
         if (!$id || !Flight::find($id)) {
             session()->flash('message', Lang::get('This flight did not exists!'));
@@ -168,6 +208,18 @@ class FlightController extends Controller
         }
         $flight->delete();
         session()->flash('message', Lang::get('This flight was removed!'));
-        return redirect()->action([FrontEndFlightController::class, 'list']);
+        return redirect()->action([self::class, 'index']);
+    }
+
+    /**
+     * list 
+     *
+     * @return object
+     */
+    public function index()
+    {
+        return view('auth.flight.index', [
+            'flights' => Flight::paginate(10)
+        ]);
     }
 }
