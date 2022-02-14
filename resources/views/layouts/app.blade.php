@@ -42,7 +42,7 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('flights') }}">{{ __('Flights') }}</a>
+                            <a class="nav-link" href="{{ url('flights') }}">{{ __('Flights') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('crews') }}">{{ __('Crews') }}</a>
