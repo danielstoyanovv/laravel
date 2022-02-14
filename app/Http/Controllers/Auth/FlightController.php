@@ -16,6 +16,18 @@ use App\Http\Controllers\Controller;
 class FlightController extends Controller
 {
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    function __construct()
+    {
+        // $this->middleware('permission:flight-list|flight-create|flight-edit|flight-delete', ['only' => ['index','show']]);
+         $this->middleware('permission:flight-create', ['only' => ['create','store']]);
+         $this->middleware('permission:flight-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:flight-delete', ['only' => ['destroy']]);
+    }
+    /**
      * create
      *
      * @param Request $request
