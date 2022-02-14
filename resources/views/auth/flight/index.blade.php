@@ -31,7 +31,7 @@
     @if ($flight->passenger)
         <div>
             @foreach ($flight->passenger()->get() as $passenger)
-            <p><b>{{ __("light passenger") }}:</b> {{$passenger->name}}</p>
+            <p><b>{{ __("Flight passenger") }}:</b> {{$passenger->name}}</p>
             @endforeach
         </div>
     @endif
