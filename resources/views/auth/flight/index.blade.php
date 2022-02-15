@@ -1,17 +1,25 @@
 @extends('layouts.app')
 @section('content')
-<div class="pull-right">
-    <a class="btn btn-success" href="{{ route('flights.create') }}">{{ __('Create new flight') }}</a>
-</div>
+@can ('flight-create')
+    <div class="pull-right">
+        <a class="btn btn-success" href="{{ route('flights.create') }}">{{ __('Create new flight') }}</a>
+    </div>
+@endcan
 @foreach ($flights as $flight)
     <div>
         {{$flight->id}} - {{$flight->destination}} - {{ __('Price') }}: {{$flight->price}} -  
-        <?= Lang::get('Date'); ?>: {{$flight->date}} 
-        <a href="{{ route('flights.show',$flight->id) }}">{{ __('SHOW') }}</a>
-        <a href="{{ route('flights.edit',$flight->id) }}">{{ __('UPDATE') }}</a>
-        {!! Form::open(['method' => 'DELETE','route' => ['flights.destroy', $flight->id],'style'=>'display:inline']) !!}
-            {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-        {!! Form::close() !!}
+        <?= Lang::get('Date'); ?>: {{$flight->date}}
+        @can ('flight-list')
+            <a href="{{ route('flights.show',$flight->id) }}">{{ __('SHOW') }}</a>
+        @endcan
+        @can ('flight-edit')
+            <a href="{{ route('flights.edit',$flight->id) }}">{{ __('UPDATE') }}</a>
+        @endcan
+        @can ('flight-delete')
+            {!! Form::open(['method' => 'DELETE','route' => ['flights.destroy', $flight->id],'style'=>'display:inline']) !!}
+                {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+            {!! Form::close() !!}
+        @endcan
     </div>
     @if ($flight->destination_image)
         <img src="<?= Storage::url($flight->destination_image); ?>" width="250px" />

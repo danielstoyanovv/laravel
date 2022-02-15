@@ -27,8 +27,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test/', [TestController::class, 'show']);
-
 Route::get('/flightcrew/list', [FlightCrewController::class, 'list'])->name('crews');
 
 Route::get('/passenger/list', [PassengerController::class, 'list'])->name('passengers');
@@ -40,14 +38,6 @@ Route::get('facebook/redirect', [CallbackController::class, 'redirect']);
 Route::get('/facebook/callback', [CallbackController::class, 'login']);
 
 Route::group(['middleware' => ['auth']], function() {
-    /*
-    Route::get('/flights', [AuthFlightController::class, 'index'])->name('flights');
-    Route::get('/auth/flight/create', [AuthFlightController::class, 'create']);
-    Route::post('/auth/flight/create', [AuthFlightController::class, 'create']);
-    Route::get('/auth/flight/update/id/{id}', [AuthFlightController::class, 'update']);
-    Route::post('/auth/flight/update/id/{id}', [AuthFlightController::class, 'update']);
-    Route::get('/auth/flight/delete/id/{id}', [AuthFlightController::class, 'delete']);
-    */
     Route::get('admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin');
     Route::get('/auth/flightcrew/create', [AuthFlightCrewController::class, 'create']);
     Route::post('/auth/flightcrew/create', [AuthFlightCrewController::class, 'create']);

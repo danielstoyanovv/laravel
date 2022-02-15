@@ -10,6 +10,7 @@ use DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -50,19 +51,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
-        ]);
-    
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-    
-        $user = User::create($input);
-        $user->assignRole($request->input('roles'));
-    
-        return redirect()->route('users.index')->with('success','User created successfully');
+        if ($request->isMethod('post') && $request) {
+            $validated = $this->processValidate($request);
+            try {
+                $validated['password'] = Hash::make($validated['password']);
+                $user = User::create($validated);
+                $user->assignRole($request->input('roles'));
+                return redirect()->route('users.index')->with('success', __('User created successfully'));
+            } catch (\Exception $e) {
+                //die($e->getMessage());
+                Log::error($e->getMessage());
+            }
+        }
+        return redirect()->route('users.index');
     }
 
     /**
@@ -74,6 +75,10 @@ class UserController extends Controller
     public function show(int $id)
     {
         $user = User::find($id);
+        if (!$user) {
+            session()->flash('message', __('This user did not exists!'));
+            return redirect()->route('users.create');
+        }
         return view('users.show', compact('user'));
     }
 
@@ -86,6 +91,10 @@ class UserController extends Controller
     public function edit(int $id)
     {
         $user = User::find($id);
+        if (!$user) {
+            session()->flash('message', __('This user did not exists!'));
+            return redirect()->route('users.create');
+        }
         $roles = Role::pluck('name','name')->all();
         $userRole = $user->roles->pluck('name','name')->all();
         return view('users.edit', compact('user', 'roles', 'userRole'));
@@ -100,27 +109,24 @@ class UserController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'same:confirm-password'
-        ]);
-    
-        $input = $request->all();
-        if (!empty($input['password'])){ 
-            $input['password'] = Hash::make($input['password']);
-        } else {
-            $input = Arr::except($input, array('password'));    
+        if ($request->isMethod('patch') && $request) {
+            $validated = $this->processValidate($request);
+            try {
+                $validated['password'] = Hash::make($validated['password']);
+                //var_dump($validated); die;
+                $user = User::find($id);
+                $user->update($validated);
+                DB::table('model_has_roles')->where('model_id', $id)->delete();
+                $user->assignRole($request->input('roles'));
+            
+                return redirect()->route('users.index')
+                                ->with('success','User updated successfully');
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+                //die($e->getMessage());
+            }
         }
-    
-        $user = User::find($id);
-        $user->update($input);
-        DB::table('model_has_roles')->where('model_id', $id)->delete();
-    
-        $user->assignRole($request->input('roles'));
-    
-        return redirect()->route('users.index')
-                        ->with('success','User updated successfully');
+        return redirect()->route('users.index');    
     }
 
     /**
@@ -131,7 +137,25 @@ class UserController extends Controller
      */
     public function destroy(int $id)
     {
-        User::find($id)->delete();
-        return redirect()->route('users.index')->with('success','User deleted successfully');
+        if ($id) {
+            User::find($id)->delete();
+            return redirect()->route('users.index')->with('success','User deleted successfully');
+        }
+        return redirect()->route('users.index');
+    }
+
+    /**
+     * process validate
+     *
+     * @param Request $request
+     * @return array
+     */
+    private function processValidate(Request $request): array
+    {
+        return $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required|same:confirm-password',
+        ]);
     }
 }
