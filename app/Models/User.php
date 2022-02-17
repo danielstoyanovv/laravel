@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Mail;
 
 class User extends Authenticatable
 {
@@ -43,4 +44,35 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * get all admin users
+     * @retrun \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllADminUsers()
+    {
+        $users = self::whereHas(
+            'roles', function($q){
+                $q->where('name', 'Admin');
+            }
+        )->get();
+        return $users;
+    }
+
+    /**
+     * sent email
+     * @param User $user
+     * @param User $noRoleUser 
+     * @return void
+     */
+    public function sendAssignRoleEmail(User $user, User $noRoleUser)
+    {
+        if ($user && $noRoleUser) {
+            Mail::send('email.assign_role_email', ['user' => $user, 'noRoleUser' => $noRoleUser], function($message) use ($user) {
+                $message->to($user->email);
+                $message->subject(__('Admin users notification'));
+                $message->from('no-reply@shouts.dev', 'Shouts.dev');
+            });
+        }
+    }
 }
