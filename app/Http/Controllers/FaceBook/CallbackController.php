@@ -44,7 +44,7 @@ class CallbackController extends Controller
             ]);
             Auth::login($createUser);
             return redirect()->action([AdminController::class, 'index']);
-        } catch (Exception $exception) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
         }
     }
