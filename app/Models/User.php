@@ -51,12 +51,11 @@ class User extends Authenticatable
      */
     public function getAllADminUsers()
     {
-        $users = self::whereHas(
-            'roles', function($q){
+        return self::whereHas(
+            'roles', function($q) {
                 $q->where('name', 'Admin');
             }
         )->get();
-        return $users;
     }
 
     /**
