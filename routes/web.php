@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\PassengerController as AuthPassengerController;
 use App\Http\Controllers\FaceBook\CallbackController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,11 +26,14 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Route::get('/flightcrew/list', [FlightCrewController::class, 'list'])->name('crews');
 
 Route::get('/passenger/list', [PassengerController::class, 'list'])->name('passengers');
+
+Route::get('/products', [ProductController::class, 'index'])->name('products');
+
 
 Auth::routes();
 
