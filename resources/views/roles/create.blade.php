@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <h2>{{ __('Create New Role') }}</h2>
-<p><a href="{{ route('roles.index') }}"> {{ __('Back') }}</a>
+<p><a href="{{ route('roles.index') }}"> {{ __('Back') }}</a></p>
    
 @if (count($errors) > 0)
     <ul>

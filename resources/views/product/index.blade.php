@@ -1,5 +1,8 @@
 @extends('layouts.app')
 @section('content')
+@auth
+    <p><a href="{{ route('products.create') }}">{{ __('Create new product') }}</a>
+@endauth
 @if (!empty($products['items']))
     <table style="border: 1px solid black;">
         <tr>

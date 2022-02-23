@@ -12,6 +12,8 @@ use App\Http\Controllers\FaceBook\CallbackController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Auth\ProductController as AuthProductController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -55,4 +57,5 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('flights', AuthFlightController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
+    Route::resource('auth/products', AuthProductController::class);
 });
