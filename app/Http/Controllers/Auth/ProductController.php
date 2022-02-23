@@ -45,7 +45,7 @@ class ProductController extends Controller
         if ($request->isMethod('post') && $request) {
             $validated = $this->processValidate($request);
             try {
-                $this->processData($validated, $request, __('Product is created!'));
+                $this->processData($validated, __('Product is created!'));
             } catch (\Exception $e) {
                 //die($e->getMessage());
                 Log::error($e->getMessage());
@@ -77,22 +77,20 @@ class ProductController extends Controller
      * process data
      *
      * @param array $validated
-     * @param Request $request
      * @param string $message
      * @return void
      */
-    private function processData(array $validated, Request $request, string $message)
+    private function processData(array $validated, string $message)
     {
         
-        if ($validated && $request && $message) {
+        if ($validated && $message) {
             $client = $this->getClient();
-            $url = config("magento.create_update_product");
             $options = [];
             foreach ($validated as $k => $v) {
                 $options['product'][$k] = $v;
             }
 
-            $client->post($url, [
+            $client->post(config("magento.create_update_product"), [
                 \GuzzleHttp\RequestOptions::JSON => $options,
             ]);
             session()->flash('message', $message);
