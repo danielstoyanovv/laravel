@@ -45,7 +45,7 @@ class ProductController extends Controller
         if ($request->isMethod('post') && $request) {
             $validated = $this->processValidate($request);
             try {
-                $this->processData($validated, __('Product is created!'));
+                $this->processData($validated, $request, __('Product is created!'));
             } catch (\Exception $e) {
                 //die($e->getMessage());
                 Log::error($e->getMessage());
@@ -77,22 +77,17 @@ class ProductController extends Controller
      * process data
      *
      * @param array $validated
+     * @param Request $request
      * @param string $message
      * @return void
      */
-    private function processData(array $validated, string $message)
+    private function processData(array $validated, Request $request, string $message)
     {
         
         if ($validated && $message) {
             $client = $this->getClient();
-            $options = [];
-            foreach ($validated as $k => $v) {
-                $options['product'][$k] = $v;
-            }
-
-            $client->post(config("magento.create_update_product"), [
-                \GuzzleHttp\RequestOptions::JSON => $options,
-            ]);
+            $this->createProduct($validated, $client);
+            $this->createProductImage($validated, $client, $request);
             session()->flash('message', $message);
         }  
     }
@@ -115,5 +110,58 @@ class ProductController extends Controller
             }
         }
         return $setData;
+    }
+
+    /**
+     * create product image with magento rest api call
+     * @param array $validated
+     * @param \GuzzleHttp\Client $client
+     * @param Request $request
+     * @return void
+     */
+    private function createProductImage(array $validated, \GuzzleHttp\Client $client, Request $request)
+    {
+        if ($validated && $client && $request && !empty($request->file('image'))) {
+            $imageOptions = [];
+            $imageOptions['entry'] = [
+                "media_type" => "image",
+                "label" => "Image",
+                "position" => 1,
+                "disabled" => false,
+                "types" => [
+                    "image",
+                    "small_image",
+                    "thumbnail"
+                ],
+                "content" => [
+                    "base64_encoded_data" => base64_encode(file_get_contents($request->file('image')->getPathName())),
+                    "type" => "image/" . $request->file('image')->getClientOriginalExtension(),
+                    "name" => $request->file('image')->getClientOriginalName()
+                ]
+            ];
+            $client->post(config("magento.create_update_product") . '/' . $validated['sku'] . "/media", [
+                \GuzzleHttp\RequestOptions::JSON => $imageOptions,
+            ]);
+        }
+    }
+
+    /**
+     * create product with magento rest api call
+     * @param array $validated
+     * @param \GuzzleHttp\Client $client
+     * @return void
+     */
+    private function createProduct(array $validated, \GuzzleHttp\Client $client)
+    {
+        if ($validated && $client) {
+            $options = [];
+            foreach ($validated as $k => $v) {
+                $options['product'][$k] = $v;
+            }
+
+            $client->post(config("magento.create_update_product"), [
+                \GuzzleHttp\RequestOptions::JSON => $options,
+            ]);
+        }
     }
 }

@@ -8,7 +8,7 @@
     @endforeach
     </ul>
 @endif
-{!! Form::open(array('route' => 'products.store','method'=>'POST', 'files' => false)) !!}
+{!! Form::open(array('route' => 'products.store','method'=>'POST', 'files' => true)) !!}
 
 <div>
     <strong>{{ __('Name') }}:</strong>
@@ -33,6 +33,10 @@
 <div>
     <strong>{{ __('Status') }}:</strong>
     {!! Form::select('status', [NULL => 'Select status', '0' => 'Disabled', '1' => 'Enabled'], [], array('class' => 'form-control')) !!}
+</div>
+<div>
+    <strong>{{ __('Image') }}:</strong>
+    {!! Form::file('image', array('class' => 'form-control')) !!}
 </div>
 <button>{{ __('Create') }}</button>
 {!! Form::close() !!}
