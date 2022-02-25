@@ -164,4 +164,68 @@ class ProductController extends Controller
             ]);
         }
     }
+
+    /**
+     * edit
+     *
+     * @param int $id
+     * @return Response
+     */
+    public function edit(int $id)
+    {
+        try {
+            if ($id) {
+                $product = $this->getProduct($id);
+                if (!empty($product['items'][0])) {
+                    return view('auth.product.edit', [
+                        'product' => $product['items'][0],
+                        'attributeSets' => $this->getMagentoAttributeSets()
+                    ]);
+                }
+            }
+        } catch (\Exception $e) {
+            //die($e->getMessage());
+            Log::error($e->getMessage());
+        }
+        session()->flash('message', __('This product did not exists!'));
+        return redirect()->route('products.create');
+        
+    }
+
+    /**
+     * update
+     *
+     * @param int $id
+     * @param Request $request
+     * @return Response
+     */
+    public function update(int $id, Request $request)
+    {
+        if ($id && $request->isMethod('patch') && $request) {
+            $validated = $this->processValidate($request);
+            try {
+                $this->processData($validated, $request, __('Product is updated!'));
+                return redirect()->route('products.edit', $id);
+            } catch (\Exception $e) {
+                //die($e->getMessage());
+                Log::error($e->getMessage());
+            }
+        }
+        session()->flash('message', __('This product did not exists!'));
+        return redirect()->route('products.create');
+    }
+
+    /**
+     * get product with mageno rest api call
+     * @param int $id
+     */
+    private function getProduct(int $id) : array
+    {
+        $client = $this->getClient();
+        $response = $client->request('GET', config('magento.create_update_product') . 
+        "?searchCriteria[filterGroups][0][filters][0][field]=entity_id&searchCriteria[filterGroups][0][filters][0][condition_type]=
+        eq&searchCriteria[filterGroups][0][filters][0][value]=" . $id);
+        return json_decode($response->getBody(), true);
+    }
+
 }
