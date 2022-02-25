@@ -219,7 +219,7 @@ class ProductController extends Controller
      * get product with mageno rest api call
      * @param int $id
      */
-    private function getProduct(int $id) : array
+    private function getProduct(int $id): array
     {
         $client = $this->getClient();
         $response = $client->request('GET', config('magento.create_update_product') . 
