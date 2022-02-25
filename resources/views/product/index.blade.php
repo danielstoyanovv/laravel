@@ -17,6 +17,7 @@
             <th>{{ __('Created at')}}</th>
             <th>{{ __('Image')}}</th>
             <th>{{ __('Custom attributes')}}</th>
+            <th>{{ __('Actions') }}</th>
         </tr>
         @foreach ($products['items'] as $product)
         <tr>        
@@ -44,6 +45,11 @@
                     @endif
                 @endforeach
             @endif
+            </td>
+            <td>
+                @auth
+                    <a href="{{ route('products.edit', $product['id']) }}">{{ __('Edit') }}</a>
+                @endauth
             </td>
         </tr>
         @endforeach 

@@ -32,7 +32,7 @@
 </div>
 <div>
     <strong>{{ __('Status') }}:</strong>
-    {!! Form::select('status', [NULL => 'Select status', '0' => 'Disabled', '1' => 'Enabled'], [], array('class' => 'form-control')) !!}
+    {!! Form::select('status', ['0' => 'Disabled', '1' => 'Enabled'], [], array('class' => 'form-control')) !!}
 </div>
 <div>
     <strong>{{ __('Image') }}:</strong>
