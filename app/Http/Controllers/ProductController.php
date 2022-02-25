@@ -18,8 +18,7 @@ class ProductController extends Controller
             $products = $this->getProducts($client);
             $currency = $this->getCurrencyData($client);
             
-            if ($products && $currency) {
-                
+            if ($products && $currency) { 
                 return view('product.index', ['products' => $products, 'currency' => $currency]);
             }
         } catch (\Exception $e) {
