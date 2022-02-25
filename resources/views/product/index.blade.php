@@ -22,7 +22,9 @@
         <tr>        
             <td>{{ $product['id'] }}</td>
             <td>{{ $product['name'] }}</td>
-            <td>{{ $product['price'] }}</td>
+            <td>
+                {{ $currency["base_currency_code"]}}{{ number_format($product['price']) }}
+            </td>
             <td>{{ $product['sku'] }}</td>
             <td>{{ $product['attribute_set_id'] }}</td>
             <td>{{ $product['status'] }}</td>

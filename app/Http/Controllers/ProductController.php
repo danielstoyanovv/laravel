@@ -15,13 +15,12 @@ class ProductController extends Controller
     {
         try {
             $client = $this->getClient();
-            $response = $client->request(
-                'GET', 
-                config('magento.query_all_products')
-            );
-            $products = json_decode($response->getBody(), true);
-            if ($products) {
-                return view('product.index', ['products' => $products]);
+            $products = $this->getProducts($client);
+            $currency = $this->getCurrencyData($client);
+            
+            if ($products && $currency) {
+                
+                return view('product.index', ['products' => $products, 'currency' => $currency]);
             }
         } catch (\Exception $e) {
             //die($e->getMessage());
@@ -38,5 +37,31 @@ class ProductController extends Controller
     private function getClient()
     {
         return new \GuzzleHttp\Client(['headers' => ['Authorization' => config('magento.restapi_token')]]);
+    }
+
+    /**
+     * Get all magento products with rest api call
+     * @return array
+     */
+    private function getProducts(\GuzzleHttp\Client $client): array
+    {
+        $response = $client->request(
+            'GET', 
+            config('magento.query_all_products')
+        );
+        return json_decode($response->getBody(), true);
+    }
+
+    /**
+     * get currency data from magento withs rest api call
+     * @return array
+     */
+    private function getCurrencyData(\GuzzleHttp\Client $client): array
+    {
+        $responseCurrency = $client->request(
+            'GET', 
+            config('magento.currency_data')
+        );
+       return json_decode($responseCurrency->getBody(), true);
     }
 }
