@@ -40,6 +40,7 @@ class ProductController extends Controller
 
     /**
      * Get all magento products with rest api call
+     * @param \GuzzleHttp\Client $client
      * @return array
      */
     private function getProducts(\GuzzleHttp\Client $client): array
@@ -53,6 +54,7 @@ class ProductController extends Controller
 
     /**
      * get currency data from magento withs rest api call
+     * @param \GuzzleHttp\Client $client
      * @return array
      */
     private function getCurrencyData(\GuzzleHttp\Client $client): array
