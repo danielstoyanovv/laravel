@@ -204,6 +204,7 @@ class ProductController extends Controller
         if ($id && $request->isMethod('patch') && $request) {
             $validated = $this->processValidate($request);
             try {
+                $this->removeImages($request, $validated);
                 $this->processData($validated, $request, __('Product is updated!'));
                 return redirect()->route('products.edit', $id);
             } catch (\Exception $e) {
@@ -228,4 +229,20 @@ class ProductController extends Controller
         return json_decode($response->getBody(), true);
     }
 
+    /**
+     * remove magento product image/s with rest api call
+     * 
+     * @param Request $request
+     * @param array $validated
+     * @return void
+     */
+    private function removeImages(Request $request, array $validated)
+    {
+        if ($request && $validated && !empty($request->input('delete_image'))) {
+            $client = $this->getClient();
+            foreach ($request->input('delete_image') as $imageId) {
+                $client->request('DELETE', config('magento.create_update_product') . "/" . $validated['sku'] . "/media/" . $imageId);
+            }
+        }
+    }
 }

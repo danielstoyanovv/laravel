@@ -35,11 +35,18 @@
         {!! Form::select('status', ['0' => 'Disabled', '1' => 'Enabled'], [!empty($product['status']) ? $product['status'] : ''], array('class' => 'form-control')) !!}
     </div>
     <div>
-        <strong>{{ __('Image') }}:</strong>
-        @if (!empty($product['media_gallery_entries'][0]['file']))
-            <img src="http://magentolocal.com/pub/media/catalog/product{{ $product['media_gallery_entries'][0]['file'] }}" width="100px" />
+        @if (!empty($product['media_gallery_entries']))
+            <strong>{{ __('Images') }}:</strong>
+            @foreach ($product['media_gallery_entries'] as $image)
+                <img src="http://magentolocal.com/pub/media/catalog/product{{ $image['file'] }}" width="100px" />
+                {{ __('Delete Image') }} <input type="checkbox" value="{{ $image['id'] }}" name='delete_image[]' >
+            @endforeach        
         @endif
-        <input value="@if (!empty($product['media_gallery_entries'][0]['file'])){{ $product['media_gallery_entries'][0]['file'] }}@endif" name="image" type="file">
+
+        <div>
+            <strong>{{ __('New image') }}:</strong>
+            {!! Form::file('image', array('class' => 'form-control')) !!}
+        </div>
 
     </div>
     <button>{{ __('Update') }}</button>
