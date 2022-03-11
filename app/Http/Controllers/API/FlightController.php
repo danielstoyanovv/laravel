@@ -51,7 +51,7 @@ class FlightController extends Controller
             if (!empty($flight)) {
                 return response()->json($flight);
             }
-            return response()->json(['Error' => $error]);
+            return response()->json(['error' => $error]);
         }
     }
 
@@ -66,7 +66,7 @@ class FlightController extends Controller
         $flight = Flight::find($id);
         $error = false;
         if (!$flight) {
-           return response()->json(['Error' => 'This flight did not exists!']);
+           return response()->json(['error' => 'This flight did not exists!']);
         }
         return response()->json($flight);
     }
@@ -91,7 +91,21 @@ class FlightController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $flight =  Flight::find($id);
+        if (!$flight) {
+            return response()->json(['error' => 'This flight did not exists!']);
+        }
+        $error = false;
+        if ($request->isMethod('patch') && $request) {
+            $validated = $this->processValidate($request);
+            try {
+                $this->processData($validated, $request, $flight);
+                return response()->json($flight);
+            } catch (\Exception $e) {
+                $error = $e->getMessage();
+            }
+        }
+        return response()->json(['error' => $error]);
     }
 
     /**
