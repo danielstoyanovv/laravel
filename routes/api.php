@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\FlightController;
+use App\Http\Controllers\API\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //Route::apiResource('flights', FlightController::class)->middleware('jwt');
-Route::apiResource('flights', FlightController::class);
+Route::apiResource('users', UsersController::class);
+
