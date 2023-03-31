@@ -17,14 +17,13 @@ class ProductController extends Controller
             $client = $this->getClient();
             $products = $this->getProducts($client);
             $currency = $this->getCurrencyData($client);
-            
-            if ($products && $currency) { 
+
+            if ($products && $currency) {
                 return view('product.index', ['products' => $products, 'currency' => $currency]);
             }
         } catch (\Exception $e) {
             //die($e->getMessage());
             Log::error($e->getMessage());
-
         }
         return redirect()->route('home');
     }
@@ -46,7 +45,7 @@ class ProductController extends Controller
     private function getProducts(\GuzzleHttp\Client $client): array
     {
         $response = $client->request(
-            'GET', 
+            'GET',
             config('magento.query_all_products')
         );
         return json_decode($response->getBody(), true);
@@ -60,9 +59,9 @@ class ProductController extends Controller
     private function getCurrencyData(\GuzzleHttp\Client $client): array
     {
         $responseCurrency = $client->request(
-            'GET', 
+            'GET',
             config('magento.currency_data')
         );
-       return json_decode($responseCurrency->getBody(), true);
+        return json_decode($responseCurrency->getBody(), true);
     }
 }

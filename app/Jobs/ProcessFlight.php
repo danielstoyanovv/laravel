@@ -14,7 +14,10 @@ use Mail;
 
 class ProcessFlight implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Indicate if the job should be marked as failed on timeout.
@@ -25,7 +28,7 @@ class ProcessFlight implements ShouldQueue
 
     /**
      * flight model
-     * 
+     *
      * @var Flight
      */
     protected $flight;

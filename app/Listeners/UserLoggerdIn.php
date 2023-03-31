@@ -25,7 +25,7 @@ class UserLoggerdIn
                     foreach ($adminUsers as $admin) {
                         $user->sendAssignRoleEmail($admin, $user);
                     }
-                }              
+                }
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());

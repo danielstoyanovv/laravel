@@ -19,7 +19,7 @@ class PassengerController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * create
      *
@@ -31,8 +31,8 @@ class PassengerController extends Controller
         if ($request->isMethod('post') && $request) {
             $validated = $this->processValidate($request);
             try {
-                $model = $this->processData($validated, $request, new Passenger, __('Passenger is created!'));               
-               if ($model) {
+                $model = $this->processData($validated, $request, new Passenger(), __('Passenger is created!'));
+                if ($model) {
                     return redirect()->action([self::class, 'update'], ['id' => $model->id]);
                 }
             } catch (\Exception $e) {
@@ -53,13 +53,15 @@ class PassengerController extends Controller
      */
     private function processValidate(Request $request): array
     {
-        return $request->validate([
+        return $request->validate(
+            [
             'name' => 'required|max:50',
-            'flight_id' => 'required'  
+            'flight_id' => 'required'
         ],
-         [
-            'flight_id.required' => __('Please select the flight!') 
-        ]);
+            [
+               'flight_id.required' => __('Please select the flight!')
+        ]
+        );
     }
 
     /**
@@ -95,8 +97,8 @@ class PassengerController extends Controller
     {
         $model = Passenger::find($id);
         if (!$model) {
-           session()->flash('message', __('This passenger did not exists!'));
-           return redirect()->action([self::class, 'create']);
+            session()->flash('message', __('This passenger did not exists!'));
+            return redirect()->action([self::class, 'create']);
         }
 
         if ($request->isMethod('post') && $request) {
@@ -108,7 +110,7 @@ class PassengerController extends Controller
                 Log::error($e->getMessage());
             }
         }
-        
+
         return view('auth.flight.passenger.update', [
             'passenger' => $model,
             'flights' => DB::table('flights')->select('id', 'destination')->get()

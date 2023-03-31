@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TestController;
-use App\Http\Controllers\FlightController;
+use App\Http\Controllers\Auth\FlightController;
 use App\Http\Controllers\FlightCrewController;
 use App\Http\Controllers\PassengerController;
 use App\Http\Controllers\Auth\FlightController as AuthFlightController;
@@ -13,7 +12,6 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\ProductController as AuthProductController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +35,7 @@ Route::get('/passenger/list', [PassengerController::class, 'list'])->name('passe
 Route::get('/products', [ProductController::class, 'index'])->name('products');
 
 
-Auth::routes();
+\Illuminate\Support\Facades\Auth::routes();
 
 Route::get('facebook/redirect', [CallbackController::class, 'redirect']);
 

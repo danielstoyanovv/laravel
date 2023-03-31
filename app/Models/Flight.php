@@ -11,11 +11,11 @@ class Flight extends Model
 {
     use HasFactory;
 
-     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+    /**
+    * The table associated with the model.
+    *
+    * @var string
+    */
     protected $table = 'flights';
 
     /**
@@ -45,7 +45,7 @@ class Flight extends Model
      * @var array
      */
     protected $guarded = [];
-    
+
     /**
      * create crew relatation
      * return object

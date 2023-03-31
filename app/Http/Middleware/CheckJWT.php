@@ -12,7 +12,7 @@ class CheckJWT
 {
     public function __construct(
         Auth0UserRepository $userRepository
-    ){
+    ) {
         $this->userRepository = $userRepository;
     }
 

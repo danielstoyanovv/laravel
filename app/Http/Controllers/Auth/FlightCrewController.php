@@ -33,8 +33,8 @@ class FlightCrewController extends Controller
         if ($request->isMethod('post') && $request) {
             $validated = $this->processValidate($request);
             try {
-                $flightCrew = $this->processData($validated, $request, new FlightsCrew, __('Flight crew is created!'));               
-               if ($flightCrew) {
+                $flightCrew = $this->processData($validated, $request, new FlightsCrew(), __('Flight crew is created!'));
+                if ($flightCrew) {
                     return redirect()->action([self::class, 'update'], ['id' => $flightCrew->id]);
                 }
             } catch (\Exception $e) {
@@ -55,7 +55,8 @@ class FlightCrewController extends Controller
      */
     private function processValidate(Request $request): array
     {
-        return $request->validate([
+        return $request->validate(
+            [
             'main_captain' => 'required|max:50',
             'captain' => 'required|max:50',
             'crew_member_1' => 'required|max:50',
@@ -63,9 +64,10 @@ class FlightCrewController extends Controller
             'crew_member_3' => 'required|max:50',
             'flight_id' => 'required',
         ],
-        [
-            'flight_id.required' => __('Please select flight destination!')
-        ]);
+            [
+                'flight_id.required' => __('Please select flight destination!')
+            ]
+        );
     }
 
     /**
@@ -101,8 +103,8 @@ class FlightCrewController extends Controller
     {
         $flightCrew = FlightsCrew::find($id);
         if (!$flightCrew) {
-           session()->flash('message', __('This flight crew did not exists!'));
-           return redirect()->action([self::class, 'create']);
+            session()->flash('message', __('This flight crew did not exists!'));
+            return redirect()->action([self::class, 'create']);
         }
 
         if ($request->isMethod('post') && $request) {
@@ -114,7 +116,7 @@ class FlightCrewController extends Controller
                 Log::error($e->getMessage());
             }
         }
-        
+
         return view('auth.flight.crew.update', [
             'flightCrew' => $flightCrew,
             'flights' => DB::table('flights')->select('id', 'destination')->get()

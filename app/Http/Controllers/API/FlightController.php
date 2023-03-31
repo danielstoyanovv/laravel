@@ -44,10 +44,10 @@ class FlightController extends Controller
             //Log::error($validated);
             //Log::error($request->all());
             try {
-                $flight = $this->processData($validated, $request, new Flight);
+                $flight = $this->processData($validated, $request, new Flight());
             } catch (\Exception $e) {
                 $error = $e->getMessage();
-            }    
+            }
             if (!empty($flight)) {
                 return response()->json($flight);
             }
@@ -66,7 +66,7 @@ class FlightController extends Controller
         $flight = Flight::find($id);
         $error = false;
         if (!$flight) {
-           return response()->json(['error' => 'This flight did not exists!']);
+            return response()->json(['error' => 'This flight did not exists!']);
         }
         return response()->json($flight);
     }

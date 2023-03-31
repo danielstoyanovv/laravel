@@ -7,7 +7,7 @@ use App\Models\Passenger;
 class PassengerController extends Controller
 {
     /**
-     * list 
+     * list
      *
      * @return object
      */

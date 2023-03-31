@@ -16,7 +16,7 @@ class ProductController extends Controller
      * @return Response
      */
     public function create(Request $request)
-    {       
+    {
         return view('auth.product.create', [
             'attributeSets' => $this->getMagentoAttributeSets()
         ]);
@@ -52,7 +52,6 @@ class ProductController extends Controller
             }
         }
         return redirect()->route('products');
-
     }
 
     /**
@@ -83,13 +82,12 @@ class ProductController extends Controller
      */
     private function processData(array $validated, Request $request, string $message)
     {
-        
         if ($validated && $message) {
             $client = $this->getClient();
             $this->createProduct($validated, $client);
             $this->createProductImage($validated, $client, $request);
             session()->flash('message', $message);
-        }  
+        }
     }
 
     /**
@@ -189,7 +187,6 @@ class ProductController extends Controller
         }
         session()->flash('message', __('This product did not exists!'));
         return redirect()->route('products.create');
-        
     }
 
     /**
@@ -223,7 +220,7 @@ class ProductController extends Controller
     private function getProduct(int $id): array
     {
         $client = $this->getClient();
-        $response = $client->request('GET', config('magento.create_update_product') . 
+        $response = $client->request('GET', config('magento.create_update_product') .
         "?searchCriteria[filterGroups][0][filters][0][field]=entity_id&searchCriteria[filterGroups][0][filters][0][condition_type]=
         eq&searchCriteria[filterGroups][0][filters][0][value]=" . $id);
         return json_decode($response->getBody(), true);
@@ -231,7 +228,7 @@ class ProductController extends Controller
 
     /**
      * remove magento product image/s with rest api call
-     * 
+     *
      * @param Request $request
      * @param array $validated
      * @return void

@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\Mail;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -52,7 +55,8 @@ class User extends Authenticatable
     public function getAllADminUsers()
     {
         return self::whereHas(
-            'roles', function($q) {
+            'roles',
+            function ($q) {
                 $q->where('name', 'Admin');
             }
         )->get();
@@ -61,13 +65,13 @@ class User extends Authenticatable
     /**
      * sent email
      * @param User $user
-     * @param User $noRoleUser 
+     * @param User $noRoleUser
      * @return void
      */
     public function sendAssignRoleEmail(User $user, User $noRoleUser)
     {
         if ($user && $noRoleUser) {
-            Mail::send('email.assign_role_email', ['user' => $user, 'noRoleUser' => $noRoleUser], function($message) use ($user) {
+            Mail::send('email.assign_role_email', ['user' => $user, 'noRoleUser' => $noRoleUser], function ($message) use ($user) {
                 $message->to($user->email);
                 $message->subject(__('Admin users notification'));
                 $message->from('no-reply@shouts.dev', 'Shouts.dev');

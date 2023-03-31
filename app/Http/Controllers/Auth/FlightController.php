@@ -20,12 +20,12 @@ class FlightController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    function __construct()
+    public function __construct()
     {
         // $this->middleware('permission:flight-list|flight-create|flight-edit|flight-delete', ['only' => ['index','show']]);
-         $this->middleware('permission:flight-create', ['only' => ['create','store']]);
-         $this->middleware('permission:flight-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:flight-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:flight-create', ['only' => ['create','store']]);
+        $this->middleware('permission:flight-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:flight-delete', ['only' => ['destroy']]);
     }
     /**
      * create
@@ -50,7 +50,7 @@ class FlightController extends Controller
         if ($request->isMethod('post') && $request) {
             $validated = $this->processValidate($request);
             try {
-                $flight = $this->processData($validated, $request, new Flight, Lang::get('Flight is created!'));
+                $flight = $this->processData($validated, $request, new Flight(), Lang::get('Flight is created!'));
                 if ($flight) {
                     return redirect()->route('flights.show', $flight->id);
                 }
@@ -72,10 +72,10 @@ class FlightController extends Controller
     {
         $flight =  Flight::where('id', $id)->first();
         if (!$flight) {
-           session()->flash('message', Lang::get('This flight did not exists!'));
-           return redirect()->route('flights.create');
+            session()->flash('message', Lang::get('This flight did not exists!'));
+            return redirect()->route('flights.create');
         }
-        
+
         return view('auth.flight.show', [
             'flight' => $flight
         ]);
@@ -92,10 +92,10 @@ class FlightController extends Controller
     {
         $flight =  Flight::where('id', $id)->first();
         if (!$flight) {
-           session()->flash('message', Lang::get('This flight did not exists!'));
-           return redirect()->action([self::class, 'create']);
+            session()->flash('message', Lang::get('This flight did not exists!'));
+            return redirect()->action([self::class, 'create']);
         }
-        
+
         return view('auth.flight.edit', [
             'flight' => $flight
         ]);
@@ -112,10 +112,10 @@ class FlightController extends Controller
     {
         $flight =  Flight::where('id', $id)->first();
         if (!$flight) {
-           session()->flash('message', Lang::get('This flight did not exists!'));
-           return redirect()->action([self::class, 'create']);
+            session()->flash('message', Lang::get('This flight did not exists!'));
+            return redirect()->action([self::class, 'create']);
         }
-        
+
         if ($request->isMethod('patch') && $request) {
             $validated = $this->processValidate($request);
             try {
@@ -126,7 +126,7 @@ class FlightController extends Controller
                 Log::error($e->getMessage());
             }
         }
-        
+
         return view('auth.flight.edit', [
             'flight' => $flight
         ]);
@@ -165,7 +165,7 @@ class FlightController extends Controller
             $flight->price = $validated['price'];
             $flight->date = $validated['date'];
 
-            if (!empty($request->file('destination_image')) && !empty(Storage::putFile('public/destination', $request->file('destination_image')))) {   
+            if (!empty($request->file('destination_image')) && !empty(Storage::putFile('public/destination', $request->file('destination_image')))) {
                 $pathImage = Storage::putFile('public/destination', $request->file('destination_image'));
                 if (!empty($flight->destination_image) && (sha1_file(public_path(Storage::url($flight->destination_image))) != sha1_file(public_path(Storage::url($pathImage))))) {
                     $removeOldFiles[] = $flight->destination_image;
@@ -207,7 +207,7 @@ class FlightController extends Controller
      * @param int $id
      * @return object
      */
-    public function destroy (int $id)
+    public function destroy(int $id)
     {
         if (!$id || !Flight::find($id)) {
             session()->flash('message', Lang::get('This flight did not exists!'));
@@ -224,7 +224,7 @@ class FlightController extends Controller
     }
 
     /**
-     * list 
+     * list
      *
      * @return object
      */

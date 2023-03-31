@@ -16,7 +16,7 @@ class NoneRoleUsersSchedule
     ) {
         $this->userModel = $userModel;
     }
-    
+
     /**
      * process job for sending no role user information to admin users
      * @return void

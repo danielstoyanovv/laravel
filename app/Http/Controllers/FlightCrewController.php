@@ -8,7 +8,7 @@ use App\Models\Flight;
 class FlightCrewController extends Controller
 {
     /**
-     * list 
+     * list
      *
      * @return object
      */
