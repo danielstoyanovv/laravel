@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Models\FlightsCrew;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -33,12 +34,15 @@ class FlightCrewController extends Controller
         if ($request->isMethod('post') && $request) {
             $validated = $this->processValidate($request);
             try {
+                DB::beginTransaction();
                 $flightCrew = $this->processData($validated, $request, new FlightsCrew(), __('Flight crew is created!'));
+                DB::commit();
+                Cache::forget('flight_crew_list');
                 if ($flightCrew) {
                     return redirect()->action([self::class, 'update'], ['id' => $flightCrew->id]);
                 }
             } catch (\Exception $e) {
-                //die($e->getMessage());
+                DB::rollback();
                 Log::error($e->getMessage());
             }
         }
@@ -110,9 +114,12 @@ class FlightCrewController extends Controller
         if ($request->isMethod('post') && $request) {
             $validated = $this->processValidate($request);
             try {
+                DB::beginTransaction();
                 $this->processData($validated, $request, $flightCrew, __('Flight crew is updated!'));
+                DB::commit();
+                Cache::forget('flight_crew_list');
             } catch (\Exception $e) {
-                //die($e->getMessage());
+                DB::rollback();
                 Log::error($e->getMessage());
             }
         }
@@ -134,9 +141,17 @@ class FlightCrewController extends Controller
             session()->flash('message', __('This flight crew did not exists!'));
             return redirect()->action([self::class, 'create']);
         }
-        $flightsCrew = FlightsCrew::find($id);
-        $flightsCrew->delete();
-        session()->flash('message', __('This flight crew was removed!'));
+        try {
+            $flightsCrew = FlightsCrew::find($id);
+            DB::beginTransaction();
+            $flightsCrew->delete();
+            DB::commit();
+            Cache::forget('flight_crew_list');
+            session()->flash('message', __('This flight crew was removed!'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error($e->getMessage());
+        }
         return redirect()->action([FrontEndFlightCrewController::class, 'list']);
     }
 }

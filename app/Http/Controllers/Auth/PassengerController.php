@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Models\Passenger;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -31,12 +32,15 @@ class PassengerController extends Controller
         if ($request->isMethod('post') && $request) {
             $validated = $this->processValidate($request);
             try {
+                DB::beginTransaction();
                 $model = $this->processData($validated, $request, new Passenger(), __('Passenger is created!'));
+                DB::commit();
+                Cache::forget('flight_passenger_list');
                 if ($model) {
                     return redirect()->action([self::class, 'update'], ['id' => $model->id]);
                 }
             } catch (\Exception $e) {
-                //die($e->getMessage());
+                DB::rollback();
                 Log::error($e->getMessage());
             }
         }
@@ -104,9 +108,12 @@ class PassengerController extends Controller
         if ($request->isMethod('post') && $request) {
             $validated = $this->processValidate($request);
             try {
+                DB::beginTransaction();
                 $this->processData($validated, $request, $model, __('Passenger is updated!'));
+                DB::commit();
+                Cache::forget('flight_passenger_list');
             } catch (\Exception $e) {
-                //die($e->getMessage());
+                DB::rollback();
                 Log::error($e->getMessage());
             }
         }
