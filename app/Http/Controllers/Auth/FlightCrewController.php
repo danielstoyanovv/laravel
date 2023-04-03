@@ -117,7 +117,7 @@ class FlightCrewController extends Controller
                 DB::beginTransaction();
                 $this->processData($validated, $request, $flightCrew, __('Flight crew is updated!'));
                 DB::commit();
-                Cache::forget('flight_crew_list');
+                Cache::flush();
             } catch (\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());

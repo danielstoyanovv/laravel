@@ -35,7 +35,7 @@ class PassengerController extends Controller
                 DB::beginTransaction();
                 $model = $this->processData($validated, $request, new Passenger(), __('Passenger is created!'));
                 DB::commit();
-                Cache::forget('flight_passenger_list');
+                Cache::flush();
                 if ($model) {
                     return redirect()->action([self::class, 'update'], ['id' => $model->id]);
                 }
@@ -111,7 +111,7 @@ class PassengerController extends Controller
                 DB::beginTransaction();
                 $this->processData($validated, $request, $model, __('Passenger is updated!'));
                 DB::commit();
-                Cache::forget('flight_passenger_list');
+                Cache::flush();
             } catch (\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
